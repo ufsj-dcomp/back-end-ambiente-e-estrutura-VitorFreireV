@@ -1,0 +1,485 @@
+swagger: "2.0"
+info:
+  description: "APP - TecWeb - My App"
+  title: "TecWeb"
+  contact:
+    email: "vitorfreire96@gmail.com"
+  version: "1.0.0"
+host: "host.com.br"
+basePath: "/v1"
+tags:
+- name: "Usuario"
+  description: "Informações e gerenciamento de usuários"
+- name: "Produto"
+  description : "Informações e gerenciamento de produto"
+- name: "Comentario"
+  description : "Informações e gerenciamento de coméntarios"
+- name: "Eventos do Usuario"
+  description: "Gerenciamento de eventos acionados pelo Usuario"
+schemes:
+- "http"
+
+paths:
+  /user:
+    post:
+      tags:
+      - "Usuario"
+      summary: "Adiciona um novo usuario."
+      operationId: "addUser"
+      consumes:
+      - "appication/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto usuario a se adicionado."
+        required: true
+        schema:
+          $ref: "#/definitions/Usuario"
+      responses: 
+        200: 
+          description: "Usuario adicionado com sucesso!"
+          schema:
+            $ref: "#/definitions/Usuario"
+          
+  /user/{userId}:
+    get:
+      tags:
+      - "Usuario"
+      summary: "Busca usuario pelo ID"
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID do usuario"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200: 
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/Usuario"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "Usuario"
+      summary: "Dado o ID do usuario e json atualiza informações do usuario"
+      operationId: "updateUserById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID referente ao usuario para ser atualizado"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "body"
+        in: "body"
+        description: "Objeto a ser atualiazado"
+        schema:
+          $ref : "#/definitions/Usuario"
+      responses:
+        200:
+          description: "Succesfull"
+          schema:
+            $ref: "#/definitions/Usuario"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "User not found"
+          
+    delete:
+      tags:
+      - "Usuario"
+      summary: "Dado ID deleta o usuario"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in : "path"
+        description: "ID referente ao usuario"
+        type: "integer"
+        format: "int64"
+        required: true
+        
+      responses:
+        200: 
+          description: "successful"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "ID not found"
+         
+         
+         
+          
+  /product:
+    post:
+      tags:
+      - "Produto"
+      summary: "Adiciona um novo produto."
+      operationId: "addProduct"
+      consumes:
+      - "appication/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto produto a ser adicionado."
+        required: true
+        schema:
+          $ref: "#/definitions/Produto"
+      responses: 
+        200: 
+          description: "Produto adicionado com sucesso!"
+          schema:
+            $ref: "#/definitions/Produto"
+
+
+  /product/{productId}:
+    get:
+      tags:
+      - "Produto"
+      summary: "Busca produto pelo ID"
+      operationId: "getProductById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID do produto"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200: 
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/Produto"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "Product not found"
+    put:
+      tags:
+      - "Produto"
+      summary: "Dado o ID do produto e json atualiza informações do produto"
+      operationId: "updateProductById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID referente ao produto a ser atualizado"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "body"
+        in: "body"
+        description: "Objeto a ser atualiazado"
+        schema:
+          $ref : "#/definitions/Produto"
+      responses:
+        200:
+          description: "Succesfull"
+          schema:
+            $ref: "#/definitions/Produto"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "Product not found"
+          
+    delete:
+      tags:
+      - "Produto"
+      summary: "Dado ID deleta o produto"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in : "path"
+        description: "ID referente ao produto"
+        type: "integer"
+        format: "int64"
+        required: true
+        
+      responses:
+        200: 
+          description: "successful"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Product not found"
+         
+  /list_products/news/{number_max}:
+    get:
+      tags:
+        - "Produto"
+      summary: "Lista os {number_max} produtos"
+      operationId: "getListProducts"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        required: true
+        name: "number_max"
+        description: "Número maximo de produtos a serem recuperados"
+        type: "integer"
+        format: "int64"
+
+      responses:
+        200: 
+          description: "Succesfull"
+          schema:
+            $ref: "#/definitions/Produto"
+        400:
+          description: "Invalid ID supplied"
+
+      
+         
+  /comment:
+    post:
+      tags:
+      - "Comentario"
+      summary: "Adiciona um novo comentario do usuario."
+      operationId: "addUserEvent"
+      consumes:
+      - "appication/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto comentario a ser adicionado."
+        required: true
+        schema:
+          $ref: "#/definitions/Comentario"
+      responses: 
+        200: 
+          description: "Produto adicionado com sucesso!"
+          schema:
+            $ref: "#/definitions/Comentario"
+
+  /comment/{commentId}:
+    get:
+      tags:
+      - "Comentario"
+      summary: "Busca comentario pelo ID"
+      operationId: "getCommentById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "commentId"
+        in: "path"
+        description: "ID do comentario"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200: 
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/Comentario"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "Comment not found"
+    put:
+      tags:
+      - "Comentario"
+      summary: "Dado o ID do comentario e json atualiza informações do comentario"
+      operationId: "updateCommentById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "commentId"
+        in: "path"
+        description: "ID referente ao comentario a ser atualizado"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "body"
+        in: "body"
+        description: "Objeto a ser atualiazado"
+        schema:
+          $ref : "#/definitions/Comentario"
+      responses:
+        200:
+          description: "Succesfull"
+          schema:
+            $ref: "#/definitions/Comentario"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "Comment not found"
+  
+    delete:
+      tags:
+      - "Comentario"
+      summary: "Dado ID deleta o comentario"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "commentId"
+        in : "path"
+        description: "ID referente ao comentario"
+        type: "integer"
+        format: "int64"
+        required: true
+      responses:
+        200: 
+          description: "successful"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Comment not found"
+          
+          
+  /userEvent:
+    post:
+      tags:
+      - "Eventos do Usuario"
+      summary: "Adiciona um novo comentario."
+      operationId: "addComment"
+      consumes:
+      - "appication/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto comentario a ser adicionado."
+        required: true
+        schema:
+          $ref: "#/definitions/EventosUsuario"
+      responses: 
+        200: 
+          description: "Evento adicionado com sucesso!"
+          schema:
+            $ref: "#/definitions/EventosUsuario"
+
+
+definitions:
+  Usuario:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      first_name:
+        type: "string"
+      phone_number:
+        type: "string"
+      second_name:
+        type: "string"
+      email:
+        type: "string"
+      city:
+        type: "string"
+      data_creation:
+        type: "string"
+      score_sell: 
+        type: "integer"
+      score_exchange:
+        type: "integer"
+      score_active:
+        type: "integer"
+      value:
+        type: "number"
+
+  Produto:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      state:
+        type: "string"
+      userID:
+        type: "integer"
+        format: "int64"
+      type_prod:
+        type: "string"
+      age_prod:
+        type: "string"
+      value:
+        type: "string"
+      city:
+        type: "string"
+      street:
+        type: "string"
+      number:
+        type: "string"
+      neighborhood:
+        type: "string"
+      data_creation:
+        type: "string"
+
+
+  Comentario:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      state:
+        type: "string"
+      userID:
+        type: "integer"
+        format: "int64"
+      prodID:
+        type: "integer"
+        format: "int64"
+      data_creation:
+        type: "string"
+      
+  EventosUsuario:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      event:
+        type: "string"
+      userID:
+        type: "integer"
+        format: "int64"
+      data_creation:
+        type: "string"
+
+
+  
+        
+        
+          
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
