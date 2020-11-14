@@ -1,0 +1,14 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span>FarmShop</span>
+    <div>
+      <a mat-button [routerLink] = "'/market'">Market</a>
+      <a mat-button [routerLink] = "'/new-product'">Novo produto</a>
+      <a mat-button [routerLink] = "'/my-products'">Meus produtos</a>
+      <a mat-button [routerLink] = "'/config'">Configurações</a>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+<router-outlet></router-outlet>
