@@ -6,6 +6,6 @@ Os exercicios estão dividas nos PUSH, no final o código é um só.
 Proposta: Ferramenta para possibilitar venda, troca e doação de produtos vegetais. 
 
 Objetivo: Possibilitar que pessoas trocam, vendam ou doem produtos vegetais em pequena escala. 
-Por exemplo, pessoas poderia postar trocar de cactos por rosas do desertos ou venda de muda de cacto. Álem disso, a ferramenta
+Por exemplo, pessoas poderiam postar troca de cactos por rosas do desertos ou venda de muda de cacto. Álem disso, a ferramenta
 levanta estatisticas sobre os produtos a fim de ajudar pequenos produtos a guiarem seus negocios. Logo, através dos dados gerados podemos gerir relatorios para 
 pequenos, medios e grandes produtores, com estatisticas de valor medio que as pessaos estão dispostas a pagar por um produto e a demanda que esse produto tem em determinada região.
