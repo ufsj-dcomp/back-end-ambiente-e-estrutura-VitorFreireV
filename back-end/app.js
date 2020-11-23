@@ -3,12 +3,13 @@ var express = require('express')
 var app = express()
 var port = 3004
 var mysql = require("mysql");
+var cors = require("cors");
 const { createSecurePair } = require('tls');
 
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "PASSWORD",
+    password: "8907742",
     database: "tecweb_myapp"
 });
 
@@ -20,7 +21,7 @@ con.connect((err) => {
     console.log('Connection established!')
 })
 
-
+app.use(cors());
 app.use(express.json());
 
 
@@ -101,8 +102,9 @@ app.post('/product', (req, res) => {
             console.log(err);
             res.status(404).end();
         }else{
-            res.status(200);
-            res.json(result).end();
+            //res.status(200);
+            console.log(result);
+            res.json(result.insertId);
         }
 
     });
@@ -128,8 +130,8 @@ app.get('/product/:productId', (req, res) => {
 app.put('/product/:productId', (req, res) => {
     var productId = req.params.productId;
     var product = req.body;
-    console.log("PUT --- prod");
-
+    console.log("PUT --- product");
+    console.log("prod: ", product);
     con.query("UPDATE Produto SET ? WHERE id = ?", [product, productId], (err, result) => {
         if (err){
             console.log(err);
@@ -163,7 +165,7 @@ app.get('/list_products/news/:number_max', function(req, res){
     
     console.log("GET --- PROD news  " + number_max);
     // LIMIT ? DANDO ERRO
-    con.query("SELECT * FROM Produto LIMIT ?",[number_max], (err, result) => {
+    con.query("SELECT * FROM Produto", (err, result) => {
         if (err){
             console.log(err);
             res.status(404).end();
