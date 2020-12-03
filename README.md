@@ -1,6 +1,8 @@
 # back-end-ambiente-e-estrutura-VitorFreireV
 back-end-ambiente-e-estrutura-VitorFreireV created by GitHub Classroom
 
+Infelizmente não implementei tudo que queria, esse final de periodo ta matando. Por fim foi legal aprender um pouco de express e angular. Valeu! :)
+
 Os exercicios estão dividas nos PUSH, no final o código é um só.
 
 Proposta: Ferramenta para possibilitar venda, troca e doação de produtos vegetais. 

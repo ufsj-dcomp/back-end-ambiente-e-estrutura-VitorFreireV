@@ -16,6 +16,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { AuthComponent } from './auth/auth.component';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth/auth.guard';
+import { Globals } from './globals/globals';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { MatInputModule } from '@angular/material/input';
     ConfigComponent,
     MyProductsComponent,
     NewProductComponent,
-    MngProductDialog
+    MngProductDialog,
+    AuthComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +49,7 @@ import { MatInputModule } from '@angular/material/input';
   entryComponents:[
     MngProductDialog
   ],
-  providers: [],
+  providers: [AuthGuard, Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

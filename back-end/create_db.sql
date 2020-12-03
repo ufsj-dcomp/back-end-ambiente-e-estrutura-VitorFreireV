@@ -9,6 +9,7 @@ CREATE TABLE Usuario(
     score_sell int(8),
     score_exchange int(8),
     score_active int(8),
+    senha varchar(30),
     PRIMARY KEY (id)
 );
 

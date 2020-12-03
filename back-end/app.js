@@ -4,7 +4,9 @@ var app = express()
 var port = 3004
 var mysql = require("mysql");
 var cors = require("cors");
+var jwt = require("jsonwebtoken");
 const { createSecurePair } = require('tls');
+const { connect } = require('http2');
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -25,8 +27,46 @@ app.use(cors());
 app.use(express.json());
 
 
+app.post('/auth', (req, res) => {
+    var user = req.body;
+
+    con.query("SELECT * FROM Usuario WHERE first_name = ? and senha = ?", [user.nome, user.senha], (err, result)=>{
+        
+        var usuario = result[0];
+
+        if(result.length == 0){
+            res.status(401);
+            res.send({token:null, usuario: usuario, success: false});
+        }else{
+            let token = jwt.sign({id: usuario.first_name}, 'tecmarket_web', {expiresIn: 6000});
+            res.status(200);
+            res.send({token:token, usuario:usuario, success:true});
+        }
+    });
+
+});
+
+
+verifica_token = (req, resp, next) => {
+    var token = req.headers['x-access-token'];
+
+    if(!token){
+        return resp.status(401).end();
+    }
+
+    jwt.verify(token, 'tecmarket_web', (err, docoded) => {
+        if(err){
+            return res.status(401).end();
+        }
+
+        req.usuario = decoded.id;
+        next();
+    });
+}
+
+
 // **************************** USUARIO
-app.post('/user', (req, res) => {
+app.post('/user', verifica_token, (req, res) => {
     var user = req.body;
     console.log(user)
     console.log("POST --- USER");
@@ -43,7 +83,7 @@ app.post('/user', (req, res) => {
     });
 });
 
-app.get('/user/:userId', (req, res) => {
+app.get('/user/:userId', verifica_token, (req, res) => {
     var userId = req.params.userId
     console.log("GET --- USER  " + userId);
     con.query("SELECT * FROM Usuario WHERE id = ?", [userId], (err, result) => {
@@ -57,7 +97,7 @@ app.get('/user/:userId', (req, res) => {
     });
 });
 
-app.put('/user/:userId', (req, res) => {
+app.put('/user/:userId', verifica_token, (req, res) => {
     var userId = req.params.userId;
     var user = req.body;
     console.log("PUT --- USER");
@@ -74,7 +114,7 @@ app.put('/user/:userId', (req, res) => {
 });
 
 
-app.delete('/user/:userId', (req, res)=>{
+app.delete('/user/:userId', verifica_token, (req, res)=>{
     var userId = req.params.userId;
     console.log("DELETE -- USER");
     con.query("DELETE FROM Usuario WHERE id = ?",[userId] ,(err, result) => {
@@ -92,7 +132,7 @@ app.delete('/user/:userId', (req, res)=>{
 
 // **************************** PRODUTO
 
-app.post('/product', (req, res) => {
+app.post('/product', verifica_token, (req, res) => {
     var prod = req.body;
     console.log(prod)
     console.log("POST --- PRODUCT");
@@ -111,7 +151,7 @@ app.post('/product', (req, res) => {
 });
 
 
-app.get('/product/:productId', (req, res) => {
+app.get('/product/:productId', verifica_token, (req, res) => {
     var productId = req.params.productId;
     
     console.log("GET --- PROD  " + productId);
@@ -127,7 +167,7 @@ app.get('/product/:productId', (req, res) => {
     });
 });
 
-app.put('/product/:productId', (req, res) => {
+app.put('/product/:productId', verifica_token, (req, res) => {
     var productId = req.params.productId;
     var product = req.body;
     console.log("PUT --- product");
@@ -144,7 +184,7 @@ app.put('/product/:productId', (req, res) => {
 });
 
 
-app.delete('/product/:productId', (req, res) => {
+app.delete('/product/:productId', verifica_token, (req, res) => {
     var productId = req.params.productId;
     console.log("DELETE -- USER");
     con.query("DELETE FROM Produto WHERE id = ?",[productId] ,(err, result) => {
@@ -160,7 +200,7 @@ app.delete('/product/:productId', (req, res) => {
 
 
 
-app.get('/list_products/news/:number_max', function(req, res){
+app.get('/list_products/news/:number_max', verifica_token, function(req, res){
     var number_max = req.params.number_max;
     
     console.log("GET --- PROD news  " + number_max);
@@ -182,7 +222,7 @@ app.get('/list_products/news/:number_max', function(req, res){
 // ***************************** COMENTARIO
 
 
-app.post('/comment', function(req, res){
+app.post('/comment', verifica_token, function(req, res){
     var comment = req.body;
     console.log(comment)
     console.log("POST --- Comment");
@@ -199,7 +239,7 @@ app.post('/comment', function(req, res){
     });
 });
 
-app.get('/comment/:commentId', function(req, res){
+app.get('/comment/:commentId', verifica_token, function(req, res){
     var commentId = req.params.commentId;
     
     console.log("GET --- Coment  " + commentId);
@@ -217,7 +257,7 @@ app.get('/comment/:commentId', function(req, res){
 
 
 
-app.put('/comment/:commentId', function(req, res){
+app.put('/comment/:commentId', verifica_token, function(req, res){
     var commentId = req.params.commentId;
     var comment = req.body;
     console.log("PUT --- prod");
@@ -233,7 +273,7 @@ app.put('/comment/:commentId', function(req, res){
     });
 });
 
-app.delete('/comment/:commentId', function(req, res){
+app.delete('/comment/:commentId', verifica_token, function(req, res){
     var commentId = req.params.commentId;
     console.log("DELETE -- USER");
     con.query("DELETE FROM Comentario WHERE id = ?",[commentId] ,(err, result) => {
@@ -249,7 +289,7 @@ app.delete('/comment/:commentId', function(req, res){
 
 //****************************** EVENTOS DO USUARIO*/
 
-app.post('/userEvent', function(req, res){
+app.post('/userEvent', verifica_token, function(req, res){
     var userEvent = req.body;
     console.log(userEvent)
     console.log("POST --- EVENTOS DO USUARIO");
